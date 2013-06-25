@@ -14,5 +14,11 @@ namespace BitCenter
         {
             InitializeComponent();
         }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Shutdown logic
+            Close();
+        }
     }
 }
