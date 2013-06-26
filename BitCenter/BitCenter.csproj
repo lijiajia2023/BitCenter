@@ -71,7 +71,7 @@
       <DependentUpon>frmPyBitmessage.cs</DependentUpon>
     </Compile>
     <Compile Include="IPlugin.cs" />
-    <Compile Include="IPluginManager.cs" />
+    <Compile Include="PluginManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmBackup.resx">

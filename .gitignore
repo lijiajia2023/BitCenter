@@ -15,8 +15,13 @@
 *.rar
 *.tar
 *.zip
+
+## VS 2008 ##
 bin
 obj
+*.suo
+*.user
+
 
 # Logs and databases #
 ######################

@@ -1,0 +1,31 @@
+Gates are the creators and destinations of messages.
+A Gate is an Interface, that can be created by any Plugin.
+Gates use the PluginInfo as identifier too.
+The GUID must be unique and the gate name should be too (for usability).
+see guid.txt for more Informations
+
+Predefined Gates in BitCenter:
+These Gates are predefined and cannot be used as GUID
+
+{INT.CLI.X}
+This are PyBitmessage clients, which are mapped to BitCenter.
+X is a random number, given when a client is mapped.
+These Gates can send and receive. The Number is stored in the
+settings so it is always the same on startup.
+
+{INT.VOID.0}
+VOIDS OF DOOM! leads to nowhere. Discards every message sent.
+Will not generate messages.
+
+{INT.RET.0}
+This gate sends a message to the source address it came from,
+using the source gate.
+This basically swaps the to and from Gate and the to and from
+address from the Message object sent to it without actually
+modifying the message object.
+
+{INT.FILE.X}
+This Gate simulates a maildrop and pickup.
+You can set two paths in its config, one for reading files,
+one for storing files.
+Can exist multiple times with multiple instances.

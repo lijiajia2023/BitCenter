@@ -1,0 +1,25 @@
+Required GUID Format: {Global.Local.Number}
+
+Format:
+3 values seperated with a dot.
+Values may contain almost any chars, numbers and symbols.
+Dots are not allowed.
+The values are case insensitive and are internally converted to uppercase.
+
+Global
+A string that should be developer specific
+to prevents Plugins from different developers to have
+name conflicts. Must not be "INT", which signals an internal Plugin
+
+Local
+A plugin specific string.
+This prevents the same plugin to be started multiple times
+
+Number
+This is an integer type number that is free to choose withhin the Int32 range.
+A plugin should have a hardcoded number to prevent it to be started multiple
+times. The IPlugin.Init(Form,int) function can be used to start a second
+instance of a plugin, if the plugin supports so, otherwise the function
+should return false.
+
+Example: {AyrA.AddressFilter.1}

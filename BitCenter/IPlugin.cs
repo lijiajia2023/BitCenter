@@ -3,6 +3,12 @@
 namespace BitCenter
 {
     /// <summary>
+    /// Used for events, that generate messages
+    /// </summary>
+    /// <param name="m">Message</param>
+    public delegate void MessageEventHandler(Message m);
+
+    /// <summary>
     /// Informations about a plugin
     /// </summary>
     public class PluginInfo
@@ -38,6 +44,11 @@ namespace BitCenter
         /// true, if this plugin has a config window.
         /// </summary>
         public bool Config;
+
+        /// <summary>
+        /// Shows, if the plugin supports multiple instances.
+        /// </summary>
+        public bool MultiInstance;
     }
 
     /// <summary>
@@ -61,14 +72,40 @@ namespace BitCenter
         public string content;
 
         /// <summary>
-        /// ID of Destination 
+        /// Destination Gate
         /// </summary>
-        public string destination;
+        public Gate destination;
+
+        /// <summary>
+        /// The Gate, that generated the Message
+        /// </summary>
+        public Gate source;
+
+        /// <summary>
+        /// defaults to true, if set to false, this message will not pass more filters.
+        /// Should generally not be set to false except for some exclusive cases
+        /// (Message is forcefully needed "AS IS")
+        /// </summary>
         public bool moreProcessing;
-        public bool delete;
     }
 
+    /// <summary>
+    /// Gates either generate messages, or receive Messages see gates.txt
+    /// </summary>
+    public interface Gate
+    {
+        bool Init(Form f);
 
+        bool Init(Form f, int ID);
+
+        PluginInfo Info();
+
+        bool MessageOut(Message m);
+
+        void Config();
+        
+        event MessageEventHandler MessageIn;
+    }
 
     /// <summary>
     /// Plugin interface.
@@ -79,7 +116,16 @@ namespace BitCenter
         /// This is called when initializing your plugin
         /// </summary>
         /// <param name="f">The MDI container form, in case this is null, the application runs in a terminal</param>
-        void Init(Form f);
+        /// <returns>true, if loaded, false on error</returns>
+        bool Init(Form f);
+
+        /// <summary>
+        /// Loads a second instance of a plugin
+        /// </summary>
+        /// <param name="f">Main Form</param>
+        /// <param name="ID">Plugin Number</param>
+        /// <returns>true, if loaded, false if not supported or error</returns>
+        bool Init(Form f, int ID);
 
         /// <summary>
         /// Returns Plugin informations
