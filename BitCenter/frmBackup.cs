@@ -8,17 +8,11 @@ using System.Windows.Forms;
 
 namespace BitCenter
 {
-    public partial class Form1 : Form
+    public partial class frmBackup : Form
     {
-        public Form1()
+        public frmBackup()
         {
             InitializeComponent();
-        }
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //Shutdown logic
-            Close();
         }
     }
 }
