@@ -1,0 +1,8 @@
+Messages are (as the name suggests) Bitmessage messages.
+Additionally a message can be flagged as service message.
+Service messages can control the operation of gates and plugins.
+Service messages are not processed by gates, they never leave the
+application.
+
+There is nothing special to messages. Each field of it can be
+changed by any plugin or any gate except the ID.

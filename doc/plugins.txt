@@ -1,0 +1,41 @@
+Plugins are components, that process messages based on rules.
+Note: Gates are plugins too, but they are described in gates.txt
+
+Plugins use the PluginInfo as identifier.
+The GUID must be unique and the plugin name should be too (for usability).
+see guid.txt for more Informations
+
+Predefined plugins in BitCenter:
+These plugins are predefined and cannot be used as GUID
+
+{INT.TRIM.X}
+This plugin can trim messages to a specific size.
+It can remove excess bytes and add a custom message
+to inform about truncation of the message.
+
+{INT.IF.X}
+Probably one of the the most useful plugins.
+This plugin has exactly two outputs. The first
+signals true, the second signals false. Depending
+on a condition, a message may take either output
+but never both.
+Output decisions can be based on:
+Subject, From, To, Body, Length
+Conditions are (including their complement):
+Contains, BeginsWith, EndsWith, IsNumeric, Matches*
+*) Regular expression matching
+
+{INT.TIMER.X}
+Generates a Timer message at a specific interval.
+The interval can be changed: if a service message is received
+the interval is changed to the number in the subject.
+Other messages are just routed through it.
+
+{INT.APPE.X}
+Appends a string to an incoming message.
+
+{INT.DUPE.X}
+Outputs every incoming message twice to every output.
+
+{INT.HOLD.X}
+Holds back every message until a timer service message is received.

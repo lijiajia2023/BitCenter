@@ -9,6 +9,18 @@ namespace BitCenter
     /// </summary>
     public class PluginManager
     {
+        private static ulong _ID=0;
+
+        /// <summary>
+        /// Returns a unique ID.
+        /// Reset to 0 on each start
+        /// </summary>
+        /// <returns>ID</returns>
+        public static ulong NextID()
+        {
+            return _ID++;
+        }
+
         /// <summary>
         /// Returns a list of loaded plugin GUIDs
         /// </summary>

@@ -2,13 +2,13 @@ Required GUID Format: {Global.Local.Number}
 
 Format:
 3 values seperated with a dot.
-Values may contain almost any chars, numbers and symbols.
-Dots are not allowed.
+Values may contain any chars, numbers and symbols that build up valid file names.
+Dots and {} are not allowed.
 The values are case insensitive and are internally converted to uppercase.
 
 Global
 A string that should be developer specific
-to prevents Plugins from different developers to have
+to prevent Plugins from different developers to have
 name conflicts. Must not be "INT", which signals an internal Plugin
 
 Local

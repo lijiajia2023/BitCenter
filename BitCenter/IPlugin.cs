@@ -3,10 +3,10 @@
 namespace BitCenter
 {
     /// <summary>
-    /// Used for events, that generate messages
+    /// Fired, whenever a gate/plugin outputs a message after processing
     /// </summary>
-    /// <param name="m">Message</param>
-    public delegate void MessageEventHandler(Message m);
+    /// <param name="m">message</param>
+    public delegate void SetMessageHandler(Message m);
 
     /// <summary>
     /// Informations about a plugin
@@ -14,9 +14,29 @@ namespace BitCenter
     public class PluginInfo
     {
         /// <summary>
-        /// Any string you want. Each plugin must have its unique string.
+        /// Various Plugin types
+        /// </summary>
+        public enum PluginType
+        {
+            /// <summary>
+            /// Unknown plugin, if set to this value, the plugin is invisible and unusable.
+            /// </summary>
+            Unknown=0,
+            /// <summary>
+            /// Regular plugin, cannot be start or end of chain.
+            /// </summary>
+            Plugin=1,
+            /// <summary>
+            /// Gate, can only be start or end of chain
+            /// </summary>
+            Gate=2
+        }
+
+        /// <summary>
+        /// Each plugin must have its unique string.
         /// You should not change this in updated versions of your plugin,
         /// as this allows you to prevent users from loading your plugin twice.
+        /// see guid.txt
         /// </summary>
         public string GUID;
 
@@ -49,6 +69,21 @@ namespace BitCenter
         /// Shows, if the plugin supports multiple instances.
         /// </summary>
         public bool MultiInstance;
+
+        /// <summary>
+        /// true, if the plugin accepts multiple inputs
+        /// </summary>
+        public bool MultiIn;
+
+        /// <summary>
+        /// true, if the plugin accepts multiple outputs
+        /// </summary>
+        public bool MultiOut;
+
+        /// <summary>
+        /// Type of Plugin
+        /// </summary>
+        public PluginType Type;
     }
 
     /// <summary>
@@ -57,54 +92,72 @@ namespace BitCenter
     public class Message
     {
         /// <summary>
+        /// Duplicates the message including the ID.
+        /// </summary>
+        /// <returns></returns>
+        public Message Dupe()
+        {
+            Message m = (Message)MemberwiseClone();
+            return m;
+        }
+
+        public Message()
+        {
+            ID = PluginManager.NextID();
+        }
+
+        /// <summary>
         /// The from address.
         /// </summary>
-        public string from;
+        public string from
+        { get; set; }
         
         /// <summary>
         /// The destination address.
         /// </summary>
-        public string to;
-        
+        public string to
+        { get; set; }
+
+        /// <summary>
+        /// Message subject
+        /// </summary>
+        public string subject
+        { get; set; }
+
         /// <summary>
         /// Message content
         /// </summary>
-        public string content;
-
-        /// <summary>
-        /// Destination Gate
-        /// </summary>
-        public Gate destination;
+        public string content
+        { get; set; }
 
         /// <summary>
         /// The Gate, that generated the Message
         /// </summary>
-        public Gate source;
+        public IPlugin source
+        { get; set; }
 
         /// <summary>
         /// defaults to true, if set to false, this message will not pass more filters.
         /// Should generally not be set to false except for some exclusive cases
-        /// (Message is forcefully needed "AS IS")
+        /// (for example Message is forcefully needed "AS IS")
         /// </summary>
-        public bool moreProcessing;
-    }
+        public bool moreProcessing
+        { get; set; }
 
-    /// <summary>
-    /// Gates either generate messages, or receive Messages see gates.txt
-    /// </summary>
-    public interface Gate
-    {
-        bool Init(Form f);
+        /// <summary>
+        /// Defaults to false. If this is true, the message can control the
+        /// operation of some gates and plugins
+        /// </summary>
+        public bool isServiceMsg
+        { get; set; }
 
-        bool Init(Form f, int ID);
-
-        PluginInfo Info();
-
-        bool MessageOut(Message m);
-
-        void Config();
-        
-        event MessageEventHandler MessageIn;
+        /// <summary>
+        /// Returns the runtime ID of the message.
+        /// Do not relay on these. If the Application is restarted,
+        /// the ID restarts at 0.
+        /// </summary>
+        public ulong ID
+        {get;private set;}
     }
 
     /// <summary>
@@ -146,11 +199,30 @@ namespace BitCenter
         void OnExit();
 
         /// <summary>
-        /// Executed whan a message arrives
+        /// Sets new plugins, that input data. Overwrites existing settings
         /// </summary>
-        /// <param name="m">message</param>
-        /// <returns>message (may be modified by this function or null, if the message is to be discarded.</returns>
-        Message OnMessage(Message m);
+        /// <param name="p">Plugins</param>
+        void setPluginInput(Plugin[] p);
+        /// <summary>
+        /// Sets new plugins, that receive processed data. Overwrites existing settings
+        /// </summary>
+        /// <param name="p">Plugins</param>
+        void setPluginOutput(Plugin[] p);
+
+        /// <summary>
+        /// Returns all input plugins
+        /// </summary>
+        /// <returns></returns>
+        Plugin[] getPluginInput();
+        /// <summary>
+        /// Returns all output plugins
+        /// </summary>
+        /// <returns></returns>
+        Plugin[] getPluginOutput();
+
+        void SetMessage(Message m);
+
+        event SetMessageHandler GetMessage;
 
         /// <summary>
         /// A plugin was added to the system.

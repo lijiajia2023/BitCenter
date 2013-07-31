@@ -3,15 +3,21 @@ A Gate is an Interface, that can be created by any Plugin.
 Gates use the PluginInfo as identifier too.
 The GUID must be unique and the gate name should be too (for usability).
 see guid.txt for more Informations
+Gates can have multiple plugins that input data in parallel
+and multiple plugins that receive outputs.
 
 Predefined Gates in BitCenter:
 These Gates are predefined and cannot be used as GUID
 
 {INT.CLI.X}
 This are PyBitmessage clients, which are mapped to BitCenter.
-X is a random number, given when a client is mapped.
+X is a number, given when a client is mapped.
 These Gates can send and receive. The Number is stored in the
 settings so it is always the same on startup.
+
+{INT.ACK.X}
+Special gate. Outputs a Message that contains the ackdata from
+a sent message for further checks.
 
 {INT.VOID.0}
 VOIDS OF DOOM! leads to nowhere. Discards every message sent.
@@ -23,9 +29,14 @@ using the source gate.
 This basically swaps the to and from Gate and the to and from
 address from the Message object sent to it without actually
 modifying the message object.
+Can be compared to an echo server.
 
 {INT.FILE.X}
 This Gate simulates a maildrop and pickup.
 You can set two paths in its config, one for reading files,
 one for storing files.
 Can exist multiple times with multiple instances.
+
+{INT.GEN.X}
+outputs a specified message every time a timer service
+message is received.
